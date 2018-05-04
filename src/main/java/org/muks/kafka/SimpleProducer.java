@@ -32,9 +32,31 @@ public class SimpleProducer {
 
         PropertiesConfiguration propsConfig = readProperties(configDir + "/" + configFile);
 
-        //Assign topicName to string variable
+        /** Assign topicName to string variable */
         TOPIC = propsConfig.getString("topic");
 
+        /** Get instance of kafka producer */
+        PRODUCER = new KafkaProducer<>(getProperties(propsConfig));
+
+
+        while (KEEP_PRODUCING) {
+            /** Keep reading sample data file and publish it over kafka */
+            File sampleDataFile = new File(configDir + "/" + propsConfig.getString("data.file"));
+            publishFileContent(sampleDataFile);
+
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        LOG.info("Message sent successfully");
+        PRODUCER.close();
+    }
+
+
+    private static Properties getProperties(PropertiesConfiguration propsConfig) {
         // create instance for properties to access PRODUCER configs
         Properties props = new Properties();
 
@@ -52,20 +74,8 @@ public class SimpleProducer {
         props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
 
-        PRODUCER = new KafkaProducer<>(props);
-
-        File sampleDataFile = new File(configDir + "/" +propsConfig.getString("data.file"));
-
-
-        while (KEEP_PRODUCING) {
-            publishFileContent(sampleDataFile);
-        }
-
-        System.out.println("Message sent successfully");
-        PRODUCER.close();
+        return props;
     }
-
-
 
     private static void publishFileContent(File sampleDataFile) {
 
@@ -116,8 +126,8 @@ public class SimpleProducer {
         @Override
         public void run() {
             KEEP_PRODUCING = false;
-            System.out.println("Done producing " + LINES_PRODUCED + " lines of the sample content.");
-            System.out.println("Shutdown hook() called, shutting down kafka PRODUCER now.");
+            LOG.info("Done producing " + LINES_PRODUCED + " lines of the sample content.");
+            LOG.info("Shutdown hook() called, shutting down kafka PRODUCER now.");
         }
     }
 
