@@ -11,7 +11,7 @@
         </layout>
     </appender>
 
-    <logger name="org.muks.insider" level="info">
+    <logger name="org.muks" level="info">
         <appender-ref ref="STDOUT"/>
     </logger>
 
@@ -33,7 +33,7 @@
         </rollingPolicy>
     </appender>
 
-    <logger name="org.muks.insider" level="info" additivity="true">
+    <logger name="org.muks" level="info" additivity="true">
         <appender-ref ref="GAME"/>
     </logger>
 
