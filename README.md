@@ -10,7 +10,7 @@
 
     java -cp <jar-file-path> <configs-dir-path> producer.properties
 
-    java -cp target/kafka-producer-1.0-SNAPSHOT.jar org.muks.kafka.producer.SimpleProducer -configDir /Users/mukthara/Data/git/personal/kafka-producer/configs -configFile producer.properties -delay 5000
+    java -cp target/kafka-producer-1.0-SNAPSHOT.jar org.muks.kafka.producer.KafkaProducer -configDir /Users/mukthara/Data/git/personal/kafka-producer/configs -configFile producer.properties -delay 5000
   
   OR 
   
